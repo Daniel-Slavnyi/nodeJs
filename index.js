@@ -27,3 +27,33 @@
 // addText()
 // replaceText()
 // readFile()
+
+const contacts = require("./contacts");
+
+const invakeAction = async ({action, id, name, email, phone}) => {
+    switch (action) {
+        case "getAll":
+            const getList = await contacts.getAll();
+            return console.log(getList);
+        case "getContacById":
+            const getById = await contacts.getContactById(id);
+            return console.log(getById);
+        case "addContact":
+            const addContact = await contacts.addContact({name, email, phone});
+        return console.log(addContact);
+        case "changeContact":
+            const changeContact = await contacts.changeContact(id, {name, email, phone});
+        return console.log(changeContact);
+        case "deleteContact":
+            const deleteContact = await contacts.deleteContact(id);
+        return console.log(deleteContact);
+    
+        default:
+            console.log("There is no methods");
+    }
+}
+
+// invakeAction({action: "getAll"})
+// invakeAction({action: "getContacById", id: "e6ywwRe4jcqxXfCZOj_1e"})
+// invakeAction({action: "changeContact", id: "z5N9C5cr_kSbRX7GbpJcL", name: "Dude", email: "You", phone: "are really the ebst"})
+invakeAction({action: "deleteContact", id: "z5N9C5cr_kSbRX7GbpJcL"})
