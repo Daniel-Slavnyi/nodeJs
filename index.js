@@ -56,4 +56,32 @@ const invakeAction = async ({action, id, name, email, phone}) => {
 // invakeAction({action: "getAll"})
 // invakeAction({action: "getContacById", id: "e6ywwRe4jcqxXfCZOj_1e"})
 // invakeAction({action: "changeContact", id: "z5N9C5cr_kSbRX7GbpJcL", name: "Dude", email: "You", phone: "are really the ebst"})
-invakeAction({action: "deleteContact", id: "z5N9C5cr_kSbRX7GbpJcL"})
+// invakeAction({action: "deleteContact", id: "z5N9C5cr_kSbRX7GbpJcL"})
+
+const express = require("express");
+const moment = require("moment");
+const fs = require("fs/promises");
+const listContast = require('./contacts/contacts.json')
+
+const app = express();
+
+app.use(async (req, res, next) => {
+    const {method, url} = req;
+    const date = moment().format("DD-MM-YYYY_hh:mm:ss");
+    await fs.appendFile("./public/server.log", `\n${method} ${url} ${date}`)
+    next();
+})
+
+app.get("/", (req, res) => {
+    res.send("<h1>You are in homepage</h1>")
+})
+
+app.get("/contacts", (req, res) => {
+    res.send("<h1>You are in contacts page</h1>")
+})
+
+app.get("/listcontacts", (req, res) => {
+    res.send(listContast)
+})
+
+app.listen(3001, () => console.log("Server is running"))
