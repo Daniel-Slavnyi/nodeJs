@@ -61,9 +61,13 @@ const invakeAction = async ({action, id, name, email, phone}) => {
 const express = require("express");
 const moment = require("moment");
 const fs = require("fs/promises");
-const listContast = require('./contacts/contacts.json')
+const listContast = require('./contacts/contacts.json');
+const cors = require("cors");
 
 const app = express();
+const corsMiddleware = cors();
+
+app.use(corsMiddleware)
 
 app.use(async (req, res, next) => {
     const {method, url} = req;
@@ -82,6 +86,12 @@ app.get("/contacts", (req, res) => {
 
 app.get("/listcontacts", (req, res) => {
     res.send(listContast)
+})
+
+app.use((req, res) => {
+    res.status(404).json({
+        message: "Not found"
+    })
 })
 
 app.listen(3001, () => console.log("Server is running"))
