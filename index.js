@@ -7,7 +7,6 @@
 // console.log("Hello Node.js i know how to create project and i am profeshional");
 // console.log("users", admin, clients);
 
-
 // isLeapYear(getCurrentMonth);
 
 // const readFile = async () => {
@@ -30,28 +29,32 @@
 
 const contacts = require("./contacts");
 
-const invakeAction = async ({action, id, name, email, phone}) => {
-    switch (action) {
-        case "getAll":
-            const getList = await contacts.getAll();
-            return console.log(getList);
-        case "getContacById":
-            const getById = await contacts.getContactById(id);
-            return console.log(getById);
-        case "addContact":
-            const addContact = await contacts.addContact({name, email, phone});
-        return console.log(addContact);
-        case "changeContact":
-            const changeContact = await contacts.changeContact(id, {name, email, phone});
-        return console.log(changeContact);
-        case "deleteContact":
-            const deleteContact = await contacts.deleteContact(id);
-        return console.log(deleteContact);
-    
-        default:
-            console.log("There is no methods");
-    }
-}
+const invakeAction = async ({ action, id, name, email, phone }) => {
+  switch (action) {
+    case "getAll":
+      const getList = await contacts.getAll();
+      return console.log(getList);
+    case "getContacById":
+      const getById = await contacts.getContactById(id);
+      return console.log(getById);
+    case "addContact":
+      const addContact = await contacts.addContact({ name, email, phone });
+      return console.log(addContact);
+    case "changeContact":
+      const changeContact = await contacts.changeContact(id, {
+        name,
+        email,
+        phone,
+      });
+      return console.log(changeContact);
+    case "deleteContact":
+      const deleteContact = await contacts.deleteContact(id);
+      return console.log(deleteContact);
+
+    default:
+      console.log("There is no methods");
+  }
+};
 
 // invakeAction({action: "getAll"})
 // invakeAction({action: "getContacById", id: "e6ywwRe4jcqxXfCZOj_1e"})
@@ -61,37 +64,37 @@ const invakeAction = async ({action, id, name, email, phone}) => {
 const express = require("express");
 const moment = require("moment");
 const fs = require("fs/promises");
-const listContast = require('./contacts/contacts.json');
+const listContast = require("./contacts/contacts.json");
 const cors = require("cors");
+
+const contactsRoutes = require("./routes/api/contacts");
 
 const app = express();
 const corsMiddleware = cors();
 
-app.use(corsMiddleware)
+app.use(corsMiddleware);
 
-app.use(async (req, res, next) => {
-    const {method, url} = req;
-    const date = moment().format("DD-MM-YYYY_hh:mm:ss");
-    await fs.appendFile("./public/server.log", `\n${method} ${url} ${date}`)
-    next();
-})
+app.use("/api/listcontacts", contactsRoutes);
 
-app.get("/", (req, res) => {
-    res.send("<h1>You are in homepage</h1>")
-})
+// app.use(async (req, res, next) => {
+//   const { method, url } = req;
+//   const date = moment().format("DD-MM-YYYY_hh:mm:ss");
+//   await fs.appendFile("./public/server.log", `\n${method} ${url} ${date}`);
+//   next();
+// });
 
-app.get("/contacts", (req, res) => {
-    res.send("<h1>You are in contacts page</h1>")
-})
+// app.get("/", (req, res) => {
+//   res.send("<h1>You are in homepage</h1>");
+// });
 
-app.get("/listcontacts", (req, res) => {
-    res.send(listContast)
-})
+// app.get("/contacts", (req, res) => {
+//   res.send("<h1>You are in contacts page</h1>");
+// });
 
-app.use((req, res) => {
-    res.status(404).json({
-        message: "Not found"
-    })
-})
+// app.use((req, res) => {
+//   res.status(404).json({
+//     message: "Not found",
+//   });
+// });
 
-app.listen(3001, () => console.log("Server is running"))
+app.listen(3001, () => console.log("Server is running"));
